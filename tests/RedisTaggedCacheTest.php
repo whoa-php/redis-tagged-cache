@@ -111,7 +111,6 @@ class RedisTaggedCacheTest extends TestCase
 
     /**
      * @param int $scriptId
-     *
      * @return mixed
      */
     private function createCacheWithSuccessEmulation(int $scriptId)
@@ -129,7 +128,6 @@ class RedisTaggedCacheTest extends TestCase
 
     /**
      * @param int $scriptId
-     *
      * @return mixed
      */
     private function createCacheWithFailEmulation(int $scriptId)
@@ -153,8 +151,7 @@ class RedisTaggedCacheTest extends TestCase
 
         /** @var Redis $redis */
 
-        $cache = new class ($redis)
-        {
+        $cache = new class ($redis) {
             use RedisTaggedCacheTrait;
 
             /**

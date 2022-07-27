@@ -1,9 +1,8 @@
-<?php declare(strict_types=1);
-
-namespace Whoa\RedisTaggedCache\Scripts;
+<?php
 
 /**
- * Copyright 2015-2019 info@neomerx.com
+ * Copyright 2015-2020 info@neomerx.com
+ * Modification Copyright 2021-2022 info@whoaphp.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +17,10 @@ namespace Whoa\RedisTaggedCache\Scripts;
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
+namespace Whoa\RedisTaggedCache\Scripts;
+
 use function assert;
 
 /**
@@ -26,17 +29,16 @@ use function assert;
 class RedisTaggedScripts
 {
     /** @var int Script index */
-    const ADD_VALUE_SCRIPT_INDEX = 0;
+    public const ADD_VALUE_SCRIPT_INDEX = 0;
 
     /** @var int Script index */
-    const REMOVE_VALUE_SCRIPT_INDEX = self::ADD_VALUE_SCRIPT_INDEX + 1;
+    public const REMOVE_VALUE_SCRIPT_INDEX = self::ADD_VALUE_SCRIPT_INDEX + 1;
 
     /** @var int Script index */
-    const INVALIDATE_TAG_SCRIPT_INDEX = self::REMOVE_VALUE_SCRIPT_INDEX + 1;
+    public const INVALIDATE_TAG_SCRIPT_INDEX = self::REMOVE_VALUE_SCRIPT_INDEX + 1;
 
     /**
      * @param int $scriptIndex
-     *
      * @return string
      */
     public static function getScriptBody(int $scriptIndex): string
@@ -58,7 +60,6 @@ class RedisTaggedScripts
 
     /**
      * @param int $scriptIndex
-     *
      * @return string
      */
     public static function getScriptDigest(int $scriptIndex): string
@@ -70,8 +71,8 @@ class RedisTaggedScripts
         );
 
         $sha1 = [
-            static::ADD_VALUE_SCRIPT_INDEX      => '0aa6dbf4cc17ca0a261c4664ef6fe5fe9cd44fd0',
-            static::REMOVE_VALUE_SCRIPT_INDEX   => 'bb69c1c4da3c4ec6afe545e893e5521bc2e7191e',
+            static::ADD_VALUE_SCRIPT_INDEX => '0aa6dbf4cc17ca0a261c4664ef6fe5fe9cd44fd0',
+            static::REMOVE_VALUE_SCRIPT_INDEX => 'bb69c1c4da3c4ec6afe545e893e5521bc2e7191e',
             static::INVALIDATE_TAG_SCRIPT_INDEX => '96181c1772cea8dd3a74a09d749ef20bb7f0349f',
         ][$scriptIndex];
 

@@ -25,6 +25,7 @@ use Whoa\RedisTaggedCache\Exceptions\RedisTaggedCacheException;
 use Whoa\RedisTaggedCache\Scripts\RedisTaggedScripts;
 use Redis;
 use RuntimeException;
+
 use function array_values;
 use function assert;
 use function json_encode;
@@ -37,17 +38,17 @@ trait RedisTaggedCacheTrait
     /**
      * @var Redis
      */
-    private $redisInstance;
+    private Redis $redisInstance;
 
     /**
      * @var string
      */
-    private $internalKeysPrefix = '_:k:';
+    private string $internalKeysPrefix = '_:k:';
 
     /**
      * @var string
      */
-    private $internalTagsPrefix = '_:t:';
+    private string $internalTagsPrefix = '_:t:';
 
     /**
      * @return Redis
@@ -67,22 +68,19 @@ trait RedisTaggedCacheTrait
         $this->redisInstance = $redisInstance;
     }
 
-    /** @noinspection PhpDocRedundantThrowsInspection
+    /**
      * @param string $key
      * @param string $value
-     * @param array  $tags
-     * @param int    $ttl
-     *
+     * @param array $tags
+     * @param int $ttl
      * @return void
-     *
-     * @throws RedisTaggedCacheException
      */
-    public function addTaggedValue(string $key, string $value, array $tags, $ttl = 0): void
+    public function addTaggedValue(string $key, string $value, array $tags, int $ttl = 0): void
     {
         // if array keys are non-consecutive it will be encoded to object instead of an array.
-        // to be on a safe side we gonna use `array_values`
+        // to be on a safe side we're going to use `array_values`
         $jsonTags = json_encode(array_values($tags));
-        $isOk     = $this->evalScript(
+        $isOk = $this->evalScript(
             RedisTaggedScripts::ADD_VALUE_SCRIPT_INDEX,
             [$key, $value, $jsonTags, $this->getInternalKeysPrefix(), $this->getInternalTagsPrefix(), $ttl],
             1
@@ -94,12 +92,9 @@ trait RedisTaggedCacheTrait
         }
     }
 
-    /** @noinspection PhpDocRedundantThrowsInspection
+    /**
      * @param string $key
-     *
      * @return void
-     *
-     * @throws RedisTaggedCacheException
      */
     public function removeTaggedValue(string $key): void
     {
@@ -115,12 +110,9 @@ trait RedisTaggedCacheTrait
         }
     }
 
-    /** @noinspection PhpDocRedundantThrowsInspection
+    /**
      * @param string $tag
-     *
      * @return void
-     *
-     * @throws RedisTaggedCacheException
      */
     public function invalidateTag(string $tag): void
     {
@@ -137,13 +129,10 @@ trait RedisTaggedCacheTrait
     }
 
     /**
-     * @param int   $scriptIndex
+     * @param int $scriptIndex
      * @param array $arguments
-     * @param int   $keysInArgs
-     *
+     * @param int $keysInArgs
      * @return bool
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected function evalScript(int $scriptIndex, array $arguments, int $keysInArgs): bool
     {
